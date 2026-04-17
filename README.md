@@ -32,23 +32,33 @@ OLLAMA_TIMEOUT=90
 
 ## Run the app
 
-Use two terminals.
+Use three terminals.
 
-### Terminal 1: start Ollama
+### Terminal 1: start the Ollama service
 
-Start or verify the local model:
+Start the local Ollama server:
+
+```bash
+ollama serve
+```
+
+Leave this terminal running. The app connects to this service at
+`http://localhost:11434` by default.
+
+### Terminal 2: verify the model
+
+In a second terminal, start or verify the local model:
 
 ```bash
 ollama run llama3
 ```
 
-If Ollama is already running as a background service, this command opens an interactive
-model session and confirms the model is available. You can leave it open while using
-the app.
+This opens an interactive model session and confirms the model is available. You can
+leave it open while using the app.
 
-### Terminal 2: start Streamlit
+### Terminal 3: start Streamlit
 
-In a second terminal, activate the virtual environment and run the UI:
+In a third terminal, activate the virtual environment and run the UI:
 
 ```bash
 cd /home/mnanos/AI_native_w
