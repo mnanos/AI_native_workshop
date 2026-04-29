@@ -4,3 +4,4 @@
 - propose the post with relevant title, short summary with dates if any and reference to the pdf or word docs.
 2) For the this AI agentic action, create a python project that fulfiles the requirements 1)
 3) propose python project tree structure and the revelant documents. 
+4) Implement the EmailReader, LLM, and WordPressPoster models.
