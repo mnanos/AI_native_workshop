@@ -5,10 +5,10 @@ This repository is a small Python workshop demo that compares prompts, workflows
 
 - `app.py`: Streamlit UI entry point.
 - `main.py`: CLI entry point for running the workflow from a file or stdin.
-- `agents/`: planner, builder, and reviewer agent implementations.
-- `workflow/`: orchestration logic, centered on `WorkflowCoordinator`.
+- `agents/`: planner, builder, reviewer, and `DeepAgent` orchestrator implementations.
+- `workflow/`: orchestration compatibility layer, centered on `WorkflowCoordinator`.
 - `utils/`: shared helpers for config, formatting, and model access.
-- `prompts/`: plain-text system prompts loaded by the agents.
+- `prompts/`: plain-text system prompts loaded by the role agents.
 - `sample_data/`: example assignment and CSV input for demos.
 - Root docs such as `README.md`, `design.md`, and `spec.md` describe usage and intent.
 
@@ -42,7 +42,7 @@ ollama run llama3
 ```
 
 ## Coding Style & Naming Conventions
-Follow existing Python style: 4-space indentation, type hints on public functions, and concise docstrings for modules and classes. Use `snake_case` for functions, variables, and files; use `PascalCase` for classes such as `WorkflowCoordinator`. Keep prompt filenames descriptive and aligned with agent names, for example `planner_prompt.txt`.
+Follow existing Python style: 4-space indentation, type hints on public functions, and concise docstrings for modules and classes. Use `snake_case` for functions, variables, and files; use `PascalCase` for classes such as `DeepAgent` and `WorkflowCoordinator`. Keep prompt filenames descriptive and aligned with agent names, for example `planner_prompt.txt`.
 
 ## Testing Guidelines
 There is no formal test suite yet. Before opening a PR, run the CLI and Streamlit paths against `sample_data/assignment.txt` and confirm the planner, builder, and reviewer stages complete without exceptions. If you add tests, prefer `pytest`, place them under `tests/`, and name files `test_<module>.py`.

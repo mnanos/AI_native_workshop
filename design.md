@@ -18,7 +18,7 @@ This document translates the requirements in `spec.md` and `full_workshop_instru
 - Complex agent memory or autonomous tool use
 
 ## Product Summary
-The application accepts a short technical assignment such as CSV analysis and plotting. It sends that assignment through three role-based modules:
+The application accepts a short technical assignment such as CSV analysis and plotting. It sends that assignment through three role-based modules coordinated by a dedicated orchestrator:
 
 `User Input -> Planner -> Builder -> Reviewer -> Final Result`
 
@@ -27,7 +27,7 @@ Each role produces a distinct artifact:
 - Builder: starter Python code
 - Reviewer: coverage analysis, gaps, risks, improvement suggestions
 
-The coordinator assembles the final result into a structured object for display in the UI and terminal.
+`DeepAgent` assembles the final result into a structured object for display in the UI and terminal. `WorkflowCoordinator` remains as a thin wrapper used by the entrypoints.
 
 ## Core Concepts Demonstrated
 ### Prompt
@@ -87,7 +87,7 @@ Expected output structure:
 - Risks / Edge Cases
 - Improvement Suggestions
 
-### 4. Coordinator
+### 4. DeepAgent Orchestrator
 Responsibilities:
 - Validate that assignment input is not empty
 - Call Planner first
@@ -95,8 +95,9 @@ Responsibilities:
 - Pass assignment, Planner output, and Builder output into Reviewer
 - Derive final next steps from the review content or simple formatting logic
 - Return one final structured result
+- Support incremental execution so the UI and CLI can render each completed stage
 
-The coordinator should be deterministic, linear, and readable enough to explain live during the workshop.
+The orchestrator should be deterministic, linear, and readable enough to explain live during the workshop.
 
 ### 5. LLM Client
 Responsibilities:
@@ -134,11 +135,12 @@ The workflow should return a dictionary or dataclass containing:
 ### Execution Flow
 1. User enters or loads an assignment
 2. UI or CLI validates input
-3. Coordinator runs Planner
-4. Coordinator runs Builder with Planner output
-5. Coordinator runs Reviewer with assignment, plan, and code
-6. Coordinator assembles final result
-7. UI or CLI renders the sections in order
+3. `WorkflowCoordinator` delegates to `DeepAgent`
+4. `DeepAgent` runs Planner
+5. `DeepAgent` runs Builder with Planner output
+6. `DeepAgent` runs Reviewer with assignment, plan, and code
+7. `DeepAgent` assembles final result or yields incremental steps
+8. UI or CLI renders the sections in order
 
 ### Module Layout
 ```text
@@ -151,6 +153,7 @@ ai-native-workshop/
 ├── .gitignore
 ├── agents/
 │   ├── __init__.py
+│   ├── deepagent.py
 │   ├── planner.py
 │   ├── builder.py
 │   └── reviewer.py
@@ -174,8 +177,9 @@ ai-native-workshop/
 ### Module Responsibilities
 - `app.py`: Streamlit interface for workshop demos
 - `main.py`: CLI fallback for terminal-only runs
-- `agents/*.py`: role-specific wrappers around prompts and model calls
-- `workflow/coordinator.py`: deterministic orchestration
+- `agents/planner.py`, `agents/builder.py`, `agents/reviewer.py`: role-specific wrappers around prompts and model calls
+- `agents/deepagent.py`: deterministic orchestration and incremental execution
+- `workflow/coordinator.py`: thin wrapper around `DeepAgent` for stable imports
 - `utils/config.py`: environment loading and defaults
 - `utils/llm.py`: Ollama HTTP client
 - `utils/formatting.py`: result shaping and display helpers
@@ -197,6 +201,8 @@ After execution, the page should show:
 5. Review
 6. Final Next Steps
 
+The UI should update progressively as each step completes rather than waiting for the full workflow to finish.
+
 Design principles:
 - Keep the layout single-column and readable
 - Use code blocks for Builder output
@@ -206,8 +212,8 @@ Design principles:
 ### CLI
 The CLI should:
 - Accept interactive input or `--input sample_data/assignment.txt`
-- Run the same coordinator logic as the UI
-- Print structured sections in the terminal
+- Run the same orchestrator logic as the UI through `WorkflowCoordinator`
+- Print structured sections in the terminal incrementally
 
 This provides a fallback if Streamlit setup is too slow or problematic during the workshop.
 

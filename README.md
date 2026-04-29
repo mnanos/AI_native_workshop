@@ -74,6 +74,8 @@ http://localhost:8501
 
 Open that URL in your browser, paste an assignment, and click **Run Workflow**.
 
+The UI now renders the workflow incrementally as each stage completes.
+
 ## Run the CLI fallback
 
 If you do not want to use the Streamlit UI, keep Ollama running and run:
@@ -91,6 +93,8 @@ python main.py
 
 Then paste an assignment and press `Ctrl-D` when finished.
 
+The CLI also prints sections incrementally as each stage finishes.
+
 ## Troubleshooting
 
 - `ollama: command not found`: install Ollama and make sure it is on your `PATH`.
@@ -102,4 +106,19 @@ Then paste an assignment and press `Ctrl-D` when finished.
 - `Planner`: extracts requirements and creates a plan
 - `Builder`: generates starter code
 - `Reviewer`: checks coverage and suggests improvements
-- `Coordinator`: orchestrates a deterministic workflow
+- `DeepAgent`: orchestrates the deterministic multi-step flow
+- `WorkflowCoordinator`: thin wrapper that keeps the CLI and Streamlit entrypoints stable
+
+## Agent Architecture
+- `agents/planner.py`: Planner role
+- `agents/builder.py`: Builder role
+- `agents/reviewer.py`: Reviewer role
+- `agents/deepagent.py`: orchestrator that runs Planner, Builder, and Reviewer
+- `workflow/coordinator.py`: compatibility layer that delegates to `DeepAgent`
+
+`DeepAgent.run_incremental()` emits these steps in order:
+1. `assignment`
+2. `planner`
+3. `builder`
+4. `reviewer`
+5. `next_steps`
