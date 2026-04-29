@@ -6,7 +6,7 @@ import argparse
 from pathlib import Path
 import sys
 
-from utils.formatting import format_terminal_section
+from utils.formatting import extract_section, format_terminal_section
 from utils.llm import LLMClientError
 from workflow import WorkflowCoordinator
 
@@ -34,7 +34,29 @@ def main() -> int:
 
     try:
         assignment = load_assignment(args.input)
-        result = WorkflowCoordinator().run(assignment)
+        coordinator = WorkflowCoordinator()
+        for step in coordinator.run_incremental(assignment):
+            if step.name == "assignment":
+                print(format_terminal_section("Assignment", step.content))
+            elif step.name == "planner":
+                print(
+                    format_terminal_section(
+                        "Requirements",
+                        extract_section(step.content, "Requirements"),
+                    )
+                )
+                print(
+                    format_terminal_section(
+                        "Plan",
+                        extract_section(step.content, "Implementation Steps"),
+                    )
+                )
+            elif step.name == "builder":
+                print(format_terminal_section("Starter Code", step.content))
+            elif step.name == "reviewer":
+                print(format_terminal_section("Review", step.content))
+            elif step.name == "next_steps":
+                print(format_terminal_section("Final Next Steps", step.content))
     except FileNotFoundError as exc:
         print(f"Input file not found: {exc}", file=sys.stderr)
         return 1
@@ -44,18 +66,6 @@ def main() -> int:
     except LLMClientError as exc:
         print(f"Model error: {exc}", file=sys.stderr)
         return 1
-
-    sections = [
-        ("Assignment", result.assignment),
-        ("Requirements", result.requirements),
-        ("Plan", result.plan),
-        ("Starter Code", result.starter_code),
-        ("Review", result.review),
-        ("Final Next Steps", result.next_steps),
-    ]
-
-    for title, body in sections:
-        print(format_terminal_section(title, body))
 
     return 0
 
