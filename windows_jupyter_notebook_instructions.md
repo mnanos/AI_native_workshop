@@ -538,6 +538,15 @@ docker run -d \
   ghcr.io/open-webui/open-webui:main
 ```
 
+On the first run, Docker may print:
+
+```text
+Unable to find image 'ghcr.io/open-webui/open-webui:main' locally
+main: Pulling from open-webui/open-webui
+```
+
+That is expected. Docker is downloading the Open WebUI image. Wait for the pull to finish. A successful run ends by printing a long container ID.
+
 Open:
 
 ```text
