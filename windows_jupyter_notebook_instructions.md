@@ -203,6 +203,17 @@ docker run -d `
   ollama/ollama
 ```
 
+If you are using **WSL** or another `bash` shell instead of PowerShell, use:
+
+```bash
+docker run -d \
+  --name ollama \
+  -p 11434:11434 \
+  -v ollama:/root/.ollama \
+  --restart unless-stopped \
+  ollama/ollama
+```
+
 On the first run, Docker may print:
 
 ```text
