@@ -553,6 +553,23 @@ Open:
 http://localhost:3000
 ```
 
+The first screen may be localized. If the browser is in English, click:
+
+```text
+Get Started
+```
+
+If the browser is in Greek, the same button may appear as:
+
+```text
+Ξετυλίξτε μυστικά
+οπουδήποτε βρίσκεστε
+
+Ξεκινήστε
+```
+
+Click the start button to continue.
+
 Configure Ollama endpoint as:
 
 ```text
