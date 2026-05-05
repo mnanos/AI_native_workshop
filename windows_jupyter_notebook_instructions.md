@@ -9,7 +9,8 @@ Install these before the workshop:
 ### Required
 - **Python 3.10 or newer**
 - **Git**
-- **Docker Desktop**
+- **Docker Desktop for Windows**, installed and running
+- **Docker Engine**, installed and running if you are using a Linux distro or WSL Linux environment instead of native Windows PowerShell
 - **Visual Studio Code** or another editor
 - **Jupyter Notebook / JupyterLab**
 
@@ -21,9 +22,11 @@ Install these before the workshop:
 
 ---
 
-## 2. Install Docker Desktop
+## 2. Install and start Docker
 
-Download and install Docker Desktop for Windows.
+Docker must be installed and running before you start Ollama or run any Docker commands.
+
+For native Windows users, download and install Docker Desktop for Windows.
 
 During installation, enable:
 
@@ -44,6 +47,13 @@ docker ps
 ```
 
 If `docker ps` works, Docker is ready.
+
+If you are using a Linux distro or a WSL Linux environment instead of native Windows PowerShell, install Docker Engine for that distro and start the Docker service before continuing. Then test it from the Linux shell:
+
+```bash
+docker --version
+docker ps
+```
 
 ---
 
