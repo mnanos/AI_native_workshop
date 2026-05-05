@@ -47,7 +47,11 @@ If `docker ps` works, Docker is ready.
 
 ---
 
-## 3. Clone or create the workshop project folder
+## 3. Get the workshop files onto your machine
+
+Choose one of these options.
+
+### Option A: clone the GitHub repository with Git
 
 Open **PowerShell** and run:
 
@@ -57,7 +61,45 @@ git clone https://github.com/mnanos/AI_native_workshop.git
 cd AI_native_workshop
 ```
 
-If you are not using Git, create a folder manually and place the notebook inside it:
+If Git asks for credentials or your setup uses SSH instead of HTTPS, use:
+
+```powershell
+git clone git@github.com:mnanos/AI_native_workshop.git
+cd AI_native_workshop
+```
+
+After this step, you should be inside a folder like:
+
+```text
+C:\Users\YourName\AI_native_workshop
+```
+
+### Option B: download the repository ZIP from GitHub
+
+If you do not want to use Git:
+
+1. Download the repository ZIP from GitHub
+2. Extract it into your home folder
+3. Open **PowerShell**
+4. Move into the extracted folder
+
+Example:
+
+```powershell
+cd $HOME
+cd AI_native_workshop
+```
+
+If the extracted folder has a suffix such as `AI_native_workshop-main`, use that exact name instead:
+
+```powershell
+cd $HOME
+cd AI_native_workshop-main
+```
+
+### Option C: create a folder manually and copy only the notebook
+
+Use this only if you were given the notebook file separately and do not need the rest of the repository.
 
 ```powershell
 cd $HOME
@@ -65,7 +107,7 @@ mkdir AI_native_workshop
 cd AI_native_workshop
 ```
 
-Then copy the notebook file into this folder:
+Then place this file into that folder:
 
 ```text
 AI_Native_Workshop_Hands_On_Notebook.ipynb
@@ -79,6 +121,12 @@ From the project folder:
 
 ```powershell
 python -m venv .venv
+```
+
+If `python` is not recognized on your system, use the Windows Python launcher instead:
+
+```powershell
+py -3.10 -m venv .venv
 ```
 
 Activate it:
@@ -113,13 +161,13 @@ Run:
 
 ```powershell
 python -m pip install --upgrade pip
-pip install notebook jupyterlab ipykernel requests pandas matplotlib
+python -m pip install notebook jupyterlab ipykernel requests pandas matplotlib
 ```
 
 Optional but useful:
 
 ```powershell
-pip install python-dotenv
+python -m pip install python-dotenv
 ```
 
 ---
@@ -153,6 +201,12 @@ docker run -d `
   -v ollama:/root/.ollama `
   --restart unless-stopped `
   ollama/ollama
+```
+
+If Docker says a container named `ollama` already exists, start the existing container instead:
+
+```powershell
+docker start ollama
 ```
 
 Check that it is running:
@@ -233,6 +287,8 @@ jupyter lab
 
 A browser window should open.
 
+If a browser does not open automatically, copy the local URL shown in PowerShell and open it manually in your browser.
+
 Open:
 
 ```text
@@ -273,6 +329,15 @@ If you pulled `mistral`, change it to:
 ```python
 MODEL_NAME = "mistral"
 ```
+
+If you prefer to configure the notebook through environment variables, the notebook reads:
+
+```powershell
+$env:OLLAMA_BASE_URL = "http://localhost:11434"
+$env:OLLAMA_MODEL = "llama3.1"
+```
+
+Important: the environment variable name is `OLLAMA_MODEL`, not `MODEL_NAME`.
 
 ---
 
