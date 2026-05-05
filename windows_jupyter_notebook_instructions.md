@@ -514,6 +514,8 @@ docker volume rm ollama
 
 If you want a browser chat UI in addition to the notebook:
 
+PowerShell:
+
 ```powershell
 docker run -d `
   --name open-webui `
@@ -521,6 +523,18 @@ docker run -d `
   -v open-webui:/app/backend/data `
   --add-host=host.docker.internal:host-gateway `
   --restart unless-stopped `
+  ghcr.io/open-webui/open-webui:main
+```
+
+Linux bash shell or WSL:
+
+```bash
+docker run -d \
+  --name open-webui \
+  -p 3000:8080 \
+  -v open-webui:/app/backend/data \
+  --add-host=host.docker.internal:host-gateway \
+  --restart unless-stopped \
   ghcr.io/open-webui/open-webui:main
 ```
 
