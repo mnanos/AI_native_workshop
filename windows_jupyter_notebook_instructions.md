@@ -203,6 +203,14 @@ docker run -d `
   ollama/ollama
 ```
 
+On the first run, Docker may print:
+
+```text
+Unable to find image 'ollama/ollama:latest' locally
+```
+
+That is expected. Docker is downloading the image from Docker Hub. Wait for the pull to finish. A successful run ends by printing a long container ID.
+
 If Docker says a container named `ollama` already exists, start the existing container instead:
 
 ```powershell
