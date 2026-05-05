@@ -262,10 +262,10 @@ Recommended:
 docker exec -it ollama ollama pull llama3.1
 ```
 
-Alternative smaller model:
+Smaller model for lower-memory machines:
 
 ```powershell
-docker exec -it ollama ollama pull mistral
+docker exec -it ollama ollama pull llama3.2:1b
 ```
 
 Check installed models:
@@ -297,6 +297,24 @@ Invoke-RestMethod -Uri http://localhost:11434/api/chat `
 ```
 
 If it returns a model response, Ollama is working.
+
+If your machine does not have enough memory for `llama3.1`, test the smaller model instead:
+
+```powershell
+Invoke-RestMethod -Uri http://localhost:11434/api/chat `
+  -Method Post `
+  -ContentType "application/json" `
+  -Body '{
+    "model": "llama3.2:1b",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Say hello from local Ollama."
+      }
+    ],
+    "stream": false
+  }'
+```
 
 ---
 
@@ -353,10 +371,10 @@ OLLAMA_BASE_URL = "http://localhost:11434"
 MODEL_NAME = "llama3.1"
 ```
 
-If you pulled `mistral`, change it to:
+If you pulled `llama3.2:1b`, change it to:
 
 ```python
-MODEL_NAME = "mistral"
+MODEL_NAME = "llama3.2:1b"
 ```
 
 If you prefer to configure the notebook through environment variables, the notebook reads:
