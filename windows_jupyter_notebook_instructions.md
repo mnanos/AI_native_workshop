@@ -71,9 +71,24 @@ git clone https://github.com/mnanos/AI_native_workshop.git
 cd AI_native_workshop
 ```
 
+Or from **Bash** / WSL:
+
+```bash
+cd "$HOME"
+git clone https://github.com/mnanos/AI_native_workshop.git
+cd AI_native_workshop
+```
+
 If Git asks for credentials or your setup uses SSH instead of HTTPS, use:
 
 ```powershell
+git clone git@github.com:mnanos/AI_native_workshop.git
+cd AI_native_workshop
+```
+
+Or from **Bash** / WSL:
+
+```bash
 git clone git@github.com:mnanos/AI_native_workshop.git
 cd AI_native_workshop
 ```
@@ -90,13 +105,20 @@ If you do not want to use Git:
 
 1. Download the repository ZIP from GitHub
 2. Extract it into your home folder
-3. Open **PowerShell**
+3. Open **PowerShell** or **Bash** / WSL
 4. Move into the extracted folder
 
 Example:
 
 ```powershell
 cd $HOME
+cd AI_native_workshop
+```
+
+Or from **Bash** / WSL:
+
+```bash
+cd "$HOME"
 cd AI_native_workshop
 ```
 
@@ -107,6 +129,13 @@ cd $HOME
 cd AI_native_workshop-main
 ```
 
+Or from **Bash** / WSL:
+
+```bash
+cd "$HOME"
+cd AI_native_workshop-main
+```
+
 ### Option C: create a folder manually and copy only the notebook
 
 Use this only if you were given the notebook file separately and do not need the rest of the repository.
@@ -114,6 +143,14 @@ Use this only if you were given the notebook file separately and do not need the
 ```powershell
 cd $HOME
 mkdir AI_native_workshop
+cd AI_native_workshop
+```
+
+Or from **Bash** / WSL:
+
+```bash
+cd "$HOME"
+mkdir -p AI_native_workshop
 cd AI_native_workshop
 ```
 
@@ -133,6 +170,12 @@ From the project folder:
 python -m venv .venv
 ```
 
+Or from **Bash** / WSL:
+
+```bash
+python3 -m venv .venv
+```
+
 If `python` is not recognized on your system, use the Windows Python launcher instead:
 
 ```powershell
@@ -143,6 +186,12 @@ Activate it:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
+```
+
+Or from **Bash** / WSL:
+
+```bash
+source .venv/bin/activate
 ```
 
 If PowerShell blocks activation, run:
@@ -163,6 +212,12 @@ When activated, your terminal should show something like:
 (.venv) PS C:\Users\YourName\AI_native_workshop>
 ```
 
+In **Bash** / WSL, it should show something like:
+
+```text
+(.venv) user@machine:~/AI_native_workshop$
+```
+
 ---
 
 ## 5. Install Python dependencies
@@ -174,9 +229,22 @@ python -m pip install --upgrade pip
 python -m pip install notebook jupyterlab ipykernel requests pandas matplotlib
 ```
 
+Or from **Bash** / WSL:
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install notebook jupyterlab ipykernel requests pandas matplotlib
+```
+
 Optional but useful:
 
 ```powershell
+python -m pip install python-dotenv
+```
+
+Or from **Bash** / WSL:
+
+```bash
 python -m pip install python-dotenv
 ```
 
@@ -187,6 +255,12 @@ python -m pip install python-dotenv
 Still inside the activated virtual environment, run:
 
 ```powershell
+python -m ipykernel install --user --name ai-native-workshop --display-name "Python (AI Native Workshop)"
+```
+
+Or from **Bash** / WSL:
+
+```bash
 python -m ipykernel install --user --name ai-native-workshop --display-name "Python (AI Native Workshop)"
 ```
 
@@ -238,9 +312,21 @@ If Docker says a container named `ollama` already exists, start the existing con
 docker start ollama
 ```
 
+Or from **Bash** / WSL:
+
+```bash
+docker start ollama
+```
+
 Check that it is running:
 
 ```powershell
+docker ps
+```
+
+Or from **Bash** / WSL:
+
+```bash
 docker ps
 ```
 
@@ -262,9 +348,21 @@ Recommended:
 docker exec -it ollama ollama pull llama3.1
 ```
 
+Or from **Bash** / WSL:
+
+```bash
+docker exec -it ollama ollama pull llama3.1
+```
+
 Smaller model for lower-memory machines:
 
 ```powershell
+docker exec -it ollama ollama pull llama3.2:1b
+```
+
+Or from **Bash** / WSL:
+
+```bash
 docker exec -it ollama ollama pull llama3.2:1b
 ```
 
@@ -274,9 +372,15 @@ Check installed models:
 docker exec -it ollama ollama list
 ```
 
+Or from **Bash** / WSL:
+
+```bash
+docker exec -it ollama ollama list
+```
+
 ---
 
-## 9. Test Ollama from PowerShell
+## 9. Test Ollama from PowerShell or Bash
 
 Run:
 
@@ -298,6 +402,23 @@ Invoke-RestMethod -Uri http://localhost:11434/api/chat `
 
 If it returns a model response, Ollama is working.
 
+Or from **Bash** / WSL:
+
+```bash
+curl http://localhost:11434/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "llama3.1",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Say hello from local Ollama."
+      }
+    ],
+    "stream": false
+  }'
+```
+
 If your machine does not have enough memory for `llama3.1`, test the smaller model instead:
 
 ```powershell
@@ -305,6 +426,23 @@ Invoke-RestMethod -Uri http://localhost:11434/api/chat `
   -Method Post `
   -ContentType "application/json" `
   -Body '{
+    "model": "llama3.2:1b",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Say hello from local Ollama."
+      }
+    ],
+    "stream": false
+  }'
+```
+
+Or from **Bash** / WSL:
+
+```bash
+curl http://localhost:11434/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{
     "model": "llama3.2:1b",
     "messages": [
       {
@@ -326,9 +464,21 @@ From the same project folder and activated venv:
 jupyter notebook
 ```
 
+Or from **Bash** / WSL:
+
+```bash
+jupyter notebook
+```
+
 or:
 
 ```powershell
+jupyter lab
+```
+
+Or from **Bash** / WSL:
+
+```bash
 jupyter lab
 ```
 
@@ -382,6 +532,13 @@ If you prefer to configure the notebook through environment variables, the noteb
 ```powershell
 $env:OLLAMA_BASE_URL = "http://localhost:11434"
 $env:OLLAMA_MODEL = "llama3.1"
+```
+
+Or from **Bash** / WSL:
+
+```bash
+export OLLAMA_BASE_URL="http://localhost:11434"
+export OLLAMA_MODEL="llama3.1"
 ```
 
 Important: the environment variable name is `OLLAMA_MODEL`, not `MODEL_NAME`.
@@ -443,6 +600,8 @@ Use PowerShell for:
 - container logs
 - troubleshooting
 
+Use Bash / WSL for the same Docker commands when your Docker installation is integrated with WSL or Docker Engine is installed inside the Linux distro.
+
 ---
 
 ## 15. Useful Windows Docker commands
@@ -453,9 +612,17 @@ Use PowerShell for:
 docker start ollama
 ```
 
+```bash
+docker start ollama
+```
+
 ### Stop Ollama container
 
 ```powershell
+docker stop ollama
+```
+
+```bash
 docker stop ollama
 ```
 
@@ -465,9 +632,17 @@ docker stop ollama
 docker restart ollama
 ```
 
+```bash
+docker restart ollama
+```
+
 ### View logs
 
 ```powershell
+docker logs -f ollama
+```
+
+```bash
 docker logs -f ollama
 ```
 
@@ -477,9 +652,17 @@ docker logs -f ollama
 docker exec -it ollama ollama list
 ```
 
+```bash
+docker exec -it ollama ollama list
+```
+
 ### Pull another model
 
 ```powershell
+docker exec -it ollama ollama pull mistral
+```
+
+```bash
 docker exec -it ollama ollama pull mistral
 ```
 
@@ -489,9 +672,17 @@ docker exec -it ollama ollama pull mistral
 docker exec -it ollama ollama rm mistral
 ```
 
+```bash
+docker exec -it ollama ollama rm mistral
+```
+
 ### Delete the container but keep models
 
 ```powershell
+docker rm -f ollama
+```
+
+```bash
 docker rm -f ollama
 ```
 
@@ -504,6 +695,11 @@ ollama
 ### Delete everything including downloaded models
 
 ```powershell
+docker rm -f ollama
+docker volume rm ollama
+```
+
+```bash
 docker rm -f ollama
 docker volume rm ollama
 ```
@@ -596,6 +792,12 @@ Close and reopen PowerShell, then run:
 docker --version
 ```
 
+If you are using Bash / WSL, make sure Docker Desktop WSL integration is enabled for your distro or Docker Engine is installed inside the distro, then run:
+
+```bash
+docker --version
+```
+
 ---
 
 ### Problem: Cannot activate virtual environment
@@ -612,6 +814,12 @@ Then:
 .\.venv\Scripts\Activate.ps1
 ```
 
+In Bash / WSL, activate with:
+
+```bash
+source .venv/bin/activate
+```
+
 ---
 
 ### Problem: Port 11434 already in use
@@ -620,6 +828,12 @@ Check what is using the port:
 
 ```powershell
 netstat -ano | findstr :11434
+```
+
+Or from **Bash** / WSL:
+
+```bash
+ss -ltnp | grep 11434
 ```
 
 If another Ollama instance is running locally, stop it or use the existing one.
@@ -631,6 +845,12 @@ If another Ollama instance is running locally, stop it or use the existing one.
 Start it:
 
 ```powershell
+docker start ollama
+```
+
+Or from **Bash** / WSL:
+
+```bash
 docker start ollama
 ```
 
@@ -646,6 +866,18 @@ docker run -d `
   ollama/ollama
 ```
 
+Or from **Bash** / WSL:
+
+```bash
+docker rm -f ollama
+docker run -d \
+  --name ollama \
+  -p 11434:11434 \
+  -v ollama:/root/.ollama \
+  --restart unless-stopped \
+  ollama/ollama
+```
+
 ---
 
 ### Problem: Model not found
@@ -656,9 +888,21 @@ Pull the model:
 docker exec -it ollama ollama pull llama3.1
 ```
 
+Or from **Bash** / WSL:
+
+```bash
+docker exec -it ollama ollama pull llama3.1
+```
+
 Then verify:
 
 ```powershell
+docker exec -it ollama ollama list
+```
+
+Or from **Bash** / WSL:
+
+```bash
 docker exec -it ollama ollama list
 ```
 
@@ -672,10 +916,22 @@ Check container:
 docker ps
 ```
 
+Or from **Bash** / WSL:
+
+```bash
+docker ps
+```
+
 Check API:
 
 ```powershell
 Invoke-RestMethod http://localhost:11434/api/tags
+```
+
+Or from **Bash** / WSL:
+
+```bash
+curl http://localhost:11434/api/tags
 ```
 
 In the notebook, verify:
@@ -691,6 +947,12 @@ OLLAMA_BASE_URL = "http://localhost:11434"
 Use a smaller model:
 
 ```powershell
+docker exec -it ollama ollama pull mistral
+```
+
+Or from **Bash** / WSL:
+
+```bash
 docker exec -it ollama ollama pull mistral
 ```
 
@@ -757,4 +1019,30 @@ Then open the notebook and select:
 
 ```text
 Python (AI Native Workshop)
+```
+
+For experienced Bash / WSL users, the short version is:
+
+```bash
+git clone https://github.com/mnanos/AI_native_workshop.git
+cd AI_native_workshop
+
+python3 -m venv .venv
+source .venv/bin/activate
+
+python -m pip install --upgrade pip
+python -m pip install notebook jupyterlab ipykernel requests pandas matplotlib
+
+python -m ipykernel install --user --name ai-native-workshop --display-name "Python (AI Native Workshop)"
+
+docker run -d \
+  --name ollama \
+  -p 11434:11434 \
+  -v ollama:/root/.ollama \
+  --restart unless-stopped \
+  ollama/ollama
+
+docker exec -it ollama ollama pull llama3.1
+
+jupyter lab
 ```
