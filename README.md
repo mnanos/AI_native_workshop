@@ -4,69 +4,146 @@ A small workshop project that demonstrates the difference between a prompt, a wo
 
 ## Prerequisites
 - Python 3.10+
-- Ollama installed locally
-- A local model pulled, for example:
+- Git
+- Docker Desktop for Windows, or Docker Engine in Linux / WSL
+- Jupyter Notebook / JupyterLab if running the hands-on notebook
+- Ollama running in Docker
+- A local model pulled into the Ollama container
 
-```bash
-ollama pull llama3
+Recommended model:
+
+```text
+llama3.1
 ```
 
 ## Setup
-Run these commands once from the project directory:
+Clone the repo and create a virtual environment.
+
+PowerShell:
+
+```powershell
+git clone https://github.com/mnanos/AI_native_workshop.git
+cd AI_native_workshop
+
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m pip install notebook jupyterlab ipykernel pandas matplotlib
+
+Copy-Item .env.example .env
+```
+
+Bash / WSL:
 
 ```bash
+git clone https://github.com/mnanos/AI_native_workshop.git
+cd AI_native_workshop
+
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m pip install notebook jupyterlab ipykernel pandas matplotlib
+
 cp .env.example .env
 ```
 
-The default `.env` values use Ollama and `llama3`:
+Update `.env` for the workshop model:
 
 ```bash
 MODEL_PROVIDER=ollama
-MODEL_NAME=llama3
+MODEL_NAME=llama3.1
 OLLAMA_BASE_URL=http://localhost:11434
 OLLAMA_TIMEOUT=90
 ```
 
-## Run the app
-
-Use three terminals.
-
-### Terminal 1: start the Ollama service
-
-Start the local Ollama server:
+Register the notebook kernel if you plan to run the Jupyter notebook:
 
 ```bash
-ollama serve
+python -m ipykernel install --user --name ai-native-workshop --display-name "Python (AI Native Workshop)"
 ```
 
-Leave this terminal running. The app connects to this service at
-`http://localhost:11434` by default.
+## Start Ollama in Docker
 
-### Terminal 2: verify the model
+The app and notebook expect Ollama at:
 
-In a second terminal, start or verify the local model:
-
-```bash
-ollama run llama3
+```text
+http://localhost:11434
 ```
 
-This opens an interactive model session and confirms the model is available. You can
-leave it open while using the app.
+PowerShell:
 
-### Terminal 3: start Streamlit
+```powershell
+docker run -d `
+  --name ollama `
+  -p 11434:11434 `
+  -v ollama:/root/.ollama `
+  --restart unless-stopped `
+  ollama/ollama
+```
 
-In a third terminal, activate the virtual environment and run the UI:
+Bash / WSL:
 
 ```bash
-cd /home/mnanos/AI_native_w
-source .venv/bin/activate
+docker run -d \
+  --name ollama \
+  -p 11434:11434 \
+  -v ollama:/root/.ollama \
+  --restart unless-stopped \
+  ollama/ollama
+```
+
+If the container already exists, start it:
+
+```bash
+docker start ollama
+docker ps
+```
+
+Pull the recommended model:
+
+```bash
+docker exec -it ollama ollama pull llama3.1
+```
+
+For lower-memory machines:
+
+```bash
+docker exec -it ollama ollama pull llama3.2:1b
+```
+
+If you use `llama3.2:1b`, also update `.env`:
+
+```bash
+MODEL_NAME=llama3.2:1b
+```
+
+Verify Ollama:
+
+PowerShell:
+
+```powershell
+Invoke-RestMethod http://localhost:11434/api/tags
+```
+
+Bash / WSL:
+
+```bash
+curl http://localhost:11434/api/tags
+```
+
+## Run the Streamlit App
+
+Activate the virtual environment, then run:
+
+```bash
 streamlit run app.py
 ```
 
-Streamlit will print a local URL, usually:
+Streamlit prints a local URL, usually:
 
 ```text
 http://localhost:8501
@@ -76,12 +153,11 @@ Open that URL in your browser, paste an assignment, and click **Run Workflow**.
 
 The UI now renders the workflow incrementally as each stage completes.
 
-## Run the CLI fallback
+## Run the CLI Fallback
 
-If you do not want to use the Streamlit UI, keep Ollama running and run:
+If you do not want to use the Streamlit UI, keep the Ollama container running and run:
 
 ```bash
-source .venv/bin/activate
 python main.py --input sample_data/assignment.txt
 ```
 
@@ -95,12 +171,49 @@ Then paste an assignment and press `Ctrl-D` when finished.
 
 The CLI also prints sections incrementally as each stage finishes.
 
+## Run the Jupyter Notebook
+
+From the activated virtual environment:
+
+```bash
+jupyter lab
+```
+
+Open:
+
+```text
+AI_Native_Workshop_Hands_On_Notebook.ipynb
+```
+
+Select this kernel:
+
+```text
+Python (AI Native Workshop)
+```
+
+The notebook reads `OLLAMA_MODEL` if you configure the model through shell environment variables:
+
+PowerShell:
+
+```powershell
+$env:OLLAMA_BASE_URL = "http://localhost:11434"
+$env:OLLAMA_MODEL = "llama3.1"
+```
+
+Bash / WSL:
+
+```bash
+export OLLAMA_BASE_URL="http://localhost:11434"
+export OLLAMA_MODEL="llama3.1"
+```
+
 ## Troubleshooting
 
-- `ollama: command not found`: install Ollama and make sure it is on your `PATH`.
-- `Could not connect to Ollama`: start Ollama and verify `OLLAMA_BASE_URL` in `.env`.
-- `model 'llama3' was not found`: run `ollama pull llama3`.
-- Slow responses: try a smaller local model and update `MODEL_NAME` in `.env`.
+- `docker: command not found`: install Docker Desktop, enable WSL integration if needed, or install Docker Engine in your Linux distro.
+- `Could not connect to Ollama`: run `docker start ollama`, check `docker ps`, and verify `OLLAMA_BASE_URL` in `.env`.
+- `model 'llama3.1' was not found`: run `docker exec -it ollama ollama pull llama3.1`.
+- Slow responses: try `llama3.2:1b` and update `MODEL_NAME` in `.env`.
+- Notebook uses the wrong model: set `OLLAMA_MODEL`, not `MODEL_NAME`, when configuring the notebook through environment variables.
 
 ## What It Shows
 - `Planner`: extracts requirements and creates a plan
