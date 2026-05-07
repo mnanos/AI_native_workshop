@@ -91,9 +91,12 @@ The workshop should use a lightweight open stack.
 ### Required Tools
 - Python 3.10 or newer
 - Git
-- Ollama
+- Docker Desktop for Windows, installed and running
+- Docker Engine, installed and running if using Linux or WSL without Docker Desktop integration
+- Ollama, usually run through Docker for the workshop
 - VS Code or another code editor
 - Terminal access
+- Jupyter Notebook / JupyterLab
 
 ### Python Libraries
 - streamlit
@@ -102,15 +105,17 @@ The workshop should use a lightweight open stack.
 - pydantic (optional)
 - pandas (optional, for sample CSV handling)
 - matplotlib (optional, for plotting)
+- notebook / jupyterlab / ipykernel (for the hands-on notebook)
 
 ### Local Model
 Recommended local models via Ollama:
-- llama3
+- llama3.1
+- llama3.2:1b for lower-memory machines
 - mistral
 - qwen
 
 Recommended default for the workshop:
-- `llama3`
+- `llama3.1`
 
 ---
 
@@ -150,24 +155,107 @@ Check version:
 git --version
 ```
 
-### Ollama
-Install Ollama from the official site, then verify:
+### Docker
+Docker must be installed and running before participants start Ollama.
+
+For native Windows users, install Docker Desktop for Windows and enable:
+
+```text
+Use WSL 2 instead of Hyper-V
+```
+
+Then open PowerShell and verify:
+
+```powershell
+docker --version
+docker ps
+```
+
+For Bash / WSL users with Docker Desktop integration or Docker Engine installed, verify from the Linux shell:
 
 ```bash
-ollama --version
+docker --version
+docker ps
+```
+
+### Start Ollama in Docker
+The workshop expects Ollama at:
+
+```text
+http://localhost:11434
+```
+
+PowerShell:
+
+```powershell
+docker run -d `
+  --name ollama `
+  -p 11434:11434 `
+  -v ollama:/root/.ollama `
+  --restart unless-stopped `
+  ollama/ollama
+```
+
+Bash / WSL:
+
+```bash
+docker run -d \
+  --name ollama \
+  -p 11434:11434 \
+  -v ollama:/root/.ollama \
+  --restart unless-stopped \
+  ollama/ollama
+```
+
+If the container already exists, start it:
+
+```powershell
+docker start ollama
+docker ps
+```
+
+Bash / WSL:
+
+```bash
+docker start ollama
+docker ps
 ```
 
 ### Pull the Model
-Before the workshop, ask participants to run:
+Before the workshop, ask participants to pull the default model:
 
-```bash
-ollama pull llama3
+```powershell
+docker exec -it ollama ollama pull llama3.1
 ```
 
-To test the model:
+Bash / WSL:
 
 ```bash
-ollama run llama3
+docker exec -it ollama ollama pull llama3.1
+```
+
+For lower-memory machines:
+
+```powershell
+docker exec -it ollama ollama pull llama3.2:1b
+```
+
+Bash / WSL:
+
+```bash
+docker exec -it ollama ollama pull llama3.2:1b
+```
+
+Verify installed models:
+
+```powershell
+docker exec -it ollama ollama list
+```
+
+Bash / WSL:
+
+```bash
+docker exec -it ollama ollama list
 ```
 
 ---
@@ -207,6 +295,13 @@ source .venv/bin/activate
 .venv\Scripts\Activate.ps1
 ```
 
+If PowerShell blocks activation:
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+.\.venv\Scripts\Activate.ps1
+```
+
 #### Windows CMD
 ```cmd
 .venv\Scripts\activate.bat
@@ -239,6 +334,20 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
+For the notebook path, install Jupyter and the dedicated kernel support too:
+
+```powershell
+python -m pip install notebook jupyterlab ipykernel requests pandas matplotlib python-dotenv
+python -m ipykernel install --user --name ai-native-workshop --display-name "Python (AI Native Workshop)"
+```
+
+Bash / WSL:
+
+```bash
+python -m pip install notebook jupyterlab ipykernel requests pandas matplotlib python-dotenv
+python -m ipykernel install --user --name ai-native-workshop --display-name "Python (AI Native Workshop)"
+```
+
 ---
 
 ## 10. Environment Configuration
@@ -249,7 +358,7 @@ Create a `.env` file in the project root.
 
 ```env
 MODEL_PROVIDER=ollama
-MODEL_NAME=llama3
+MODEL_NAME=llama3.1
 OLLAMA_BASE_URL=http://localhost:11434
 ```
 
@@ -264,6 +373,22 @@ cp .env.example .env
 ```powershell
 Copy-Item .env.example .env
 ```
+
+If configuring through shell environment variables instead of `.env`, use:
+
+```powershell
+$env:OLLAMA_BASE_URL = "http://localhost:11434"
+$env:OLLAMA_MODEL = "llama3.1"
+```
+
+Bash / WSL:
+
+```bash
+export OLLAMA_BASE_URL="http://localhost:11434"
+export OLLAMA_MODEL="llama3.1"
+```
+
+Important for the notebook path: the notebook environment variable name is `OLLAMA_MODEL`, not `MODEL_NAME`.
 
 ---
 
@@ -557,7 +682,58 @@ Ask participants to:
 ## 20. Commands to Run the Project
 
 ### Start Ollama model service
-If Ollama is installed, ensure it is available locally.
+If using Docker, start or verify the Ollama container.
+
+PowerShell:
+
+```powershell
+docker start ollama
+docker ps
+```
+
+Bash / WSL:
+
+```bash
+docker start ollama
+docker ps
+```
+
+Test the Ollama API.
+
+PowerShell:
+
+```powershell
+Invoke-RestMethod -Uri http://localhost:11434/api/chat `
+  -Method Post `
+  -ContentType "application/json" `
+  -Body '{
+    "model": "llama3.1",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Say hello from local Ollama."
+      }
+    ],
+    "stream": false
+  }'
+```
+
+Bash / WSL:
+
+```bash
+curl http://localhost:11434/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "llama3.1",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Say hello from local Ollama."
+      }
+    ],
+    "stream": false
+  }'
+```
 
 ### Run Streamlit UI
 ```bash
@@ -567,6 +743,84 @@ streamlit run app.py
 ### Run CLI
 ```bash
 python main.py
+```
+
+Optional:
+
+```bash
+python main.py --input sample_data/assignment.txt
+```
+
+### Run Jupyter Notebook
+From the activated virtual environment:
+
+```powershell
+jupyter lab
+```
+
+Bash / WSL:
+
+```bash
+jupyter lab
+```
+
+Open `AI_Native_Workshop_Hands_On_Notebook.ipynb` and select:
+
+```text
+Python (AI Native Workshop)
+```
+
+### Minimal command sequence
+For experienced Windows PowerShell users:
+
+```powershell
+git clone https://github.com/mnanos/AI_native_workshop.git
+cd AI_native_workshop
+
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+
+python -m pip install --upgrade pip
+python -m pip install notebook jupyterlab ipykernel requests pandas matplotlib python-dotenv
+
+python -m ipykernel install --user --name ai-native-workshop --display-name "Python (AI Native Workshop)"
+
+docker run -d `
+  --name ollama `
+  -p 11434:11434 `
+  -v ollama:/root/.ollama `
+  --restart unless-stopped `
+  ollama/ollama
+
+docker exec -it ollama ollama pull llama3.1
+
+jupyter lab
+```
+
+For experienced Bash / WSL users:
+
+```bash
+git clone https://github.com/mnanos/AI_native_workshop.git
+cd AI_native_workshop
+
+python3 -m venv .venv
+source .venv/bin/activate
+
+python -m pip install --upgrade pip
+python -m pip install notebook jupyterlab ipykernel requests pandas matplotlib python-dotenv
+
+python -m ipykernel install --user --name ai-native-workshop --display-name "Python (AI Native Workshop)"
+
+docker run -d \
+  --name ollama \
+  -p 11434:11434 \
+  -v ollama:/root/.ollama \
+  --restart unless-stopped \
+  ollama/ollama
+
+docker exec -it ollama ollama pull llama3.1
+
+jupyter lab
 ```
 
 ---
@@ -580,8 +834,10 @@ The project README should include:
 - setup steps
 - venv instructions
 - Ollama setup
+- Jupyter notebook setup
 - how to run Streamlit
 - how to run CLI
+- how to run the notebook
 - example input
 - possible extensions
 
@@ -589,22 +845,74 @@ The project README should include:
 
 ## 22. Common Troubleshooting Notes
 
-### Problem: `ollama` command not found
+### Problem: `docker` command not found
 Cause:
-- Ollama not installed or not in PATH
+- Docker Desktop WSL integration is not enabled
+- Docker Engine is not installed in the Linux distro
+- terminal was opened before Docker was installed
 
 Fix:
-- install Ollama
+- install and start Docker Desktop, or install Docker Engine for the distro
+- enable Docker Desktop WSL integration when using WSL
 - restart terminal
-- verify with `ollama --version`
+- verify with `docker --version`
+
+### Problem: Ollama container already exists
+Cause:
+- the `ollama` container was created in an earlier setup attempt
+
+Fix:
+
+```powershell
+docker start ollama
+```
+
+Bash / WSL:
+
+```bash
+docker start ollama
+```
+
+Or recreate it:
+
+```powershell
+docker rm -f ollama
+docker run -d `
+  --name ollama `
+  -p 11434:11434 `
+  -v ollama:/root/.ollama `
+  --restart unless-stopped `
+  ollama/ollama
+```
+
+Bash / WSL:
+
+```bash
+docker rm -f ollama
+docker run -d \
+  --name ollama \
+  -p 11434:11434 \
+  -v ollama:/root/.ollama \
+  --restart unless-stopped \
+  ollama/ollama
+```
 
 ### Problem: model not found
 Cause:
 - model not pulled yet
 
 Fix:
+
+```powershell
+docker exec -it ollama ollama pull llama3.1
+docker exec -it ollama ollama list
+```
+
+Bash / WSL:
+
 ```bash
-ollama pull llama3
+docker exec -it ollama ollama pull llama3.1
+docker exec -it ollama ollama list
 ```
 
 ### Problem: Python package missing
@@ -624,13 +932,39 @@ Fix:
 - activate `.venv`
 - reinstall requirements
 
+### Problem: Notebook cannot connect to Ollama
+Cause:
+- the Ollama container is not running
+- the notebook has the wrong base URL or model name
+
+Fix:
+
+```powershell
+docker ps
+Invoke-RestMethod http://localhost:11434/api/tags
+```
+
+Bash / WSL:
+
+```bash
+docker ps
+curl http://localhost:11434/api/tags
+```
+
+In the notebook, verify:
+
+```python
+OLLAMA_BASE_URL = "http://localhost:11434"
+MODEL_NAME = "llama3.1"
+```
+
 ### Problem: slow model response
 Cause:
 - local hardware limitations
 
 Fix:
 - keep prompts concise
-- use a lighter model if needed
+- use `llama3.2:1b` or another lighter model if needed
 - use CLI fallback if UI feels slow
 
 ---
@@ -695,11 +1029,13 @@ Participants will:
 ### Participant Checklist
 - install Python
 - install Git
-- install Ollama
-- pull the selected model
+- install and start Docker Desktop or Docker Engine
+- start the Ollama Docker container
+- pull the selected model in the container
 - clone repo
 - create venv
 - install requirements
+- register the Jupyter kernel if using the notebook
 - run app
 
 ---
@@ -708,7 +1044,7 @@ Participants will:
 
 For the workshop, keep the defaults simple:
 
-- model: `llama3`
+- model: `llama3.1`
 - provider: `ollama`
 - UI: `streamlit`
 - fallback: `main.py`
