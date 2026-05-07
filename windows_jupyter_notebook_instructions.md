@@ -989,7 +989,7 @@ Before the workshop, participants should confirm:
 
 ## 19. Minimal command sequence
 
-For experienced Windows users, this is the short version:
+For experienced Windows PowerShell users, this is the short version:
 
 ```powershell
 git clone https://github.com/mnanos/AI_native_workshop.git
@@ -1013,12 +1013,6 @@ docker run -d `
 docker exec -it ollama ollama pull llama3.1
 
 jupyter lab
-```
-
-Then open the notebook and select:
-
-```text
-Python (AI Native Workshop)
 ```
 
 For experienced Bash / WSL users, the short version is:
@@ -1045,4 +1039,10 @@ docker run -d \
 docker exec -it ollama ollama pull llama3.1
 
 jupyter lab
+```
+
+Then open the notebook and select:
+
+```text
+Python (AI Native Workshop)
 ```
