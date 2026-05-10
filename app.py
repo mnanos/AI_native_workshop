@@ -44,15 +44,26 @@ if st.button("Run Workflow", type="primary"):
                     st.write(step.content)
                 status.write("Assignment accepted.")
             elif step.name == "planner":
-                with requirements_placeholder:
-                    st.subheader("Requirements")
-                    st.markdown(extract_section(step.content, "Requirements"))
-                with project_structure_placeholder:
-                    st.subheader("Proposed Project Structure")
-                    st.markdown(extract_section(step.content, "Proposed Project Structure"))
-                with plan_placeholder:
-                    st.subheader("Plan")
-                    st.markdown(extract_section(step.content, "Implementation Steps"))
+                requirements = extract_section(step.content, "Requirements")
+                project_structure = extract_section(step.content, "Proposed Project Structure")
+                plan = extract_section(step.content, "Implementation Steps")
+
+                if requirements:
+                    with requirements_placeholder:
+                        st.subheader("Requirements")
+                        st.markdown(requirements)
+                if project_structure:
+                    with project_structure_placeholder:
+                        st.subheader("Proposed Project Structure")
+                        st.markdown(project_structure)
+                if plan:
+                    with plan_placeholder:
+                        st.subheader("Plan")
+                        st.markdown(plan)
+                if not any((requirements, project_structure, plan)):
+                    with requirements_placeholder:
+                        st.subheader("Planner Output")
+                        st.markdown(step.content)
                 status.write("Planner completed.")
             elif step.name == "builder":
                 with code_placeholder:

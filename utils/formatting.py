@@ -72,7 +72,7 @@ def extract_section(text: str, heading: str) -> str:
             collected.append(raw_line)
 
     section = "\n".join(collected).strip()
-    return section or text.strip()
+    return section
 
 
 def format_terminal_section(title: str, body: str) -> str:

@@ -39,24 +39,18 @@ def main() -> int:
             if step.name == "assignment":
                 print(format_terminal_section("Assignment", step.content))
             elif step.name == "planner":
-                print(
-                    format_terminal_section(
-                        "Requirements",
-                        extract_section(step.content, "Requirements"),
-                    )
-                )
-                print(
-                    format_terminal_section(
-                        "Proposed Project Structure",
-                        extract_section(step.content, "Proposed Project Structure"),
-                    )
-                )
-                print(
-                    format_terminal_section(
-                        "Plan",
-                        extract_section(step.content, "Implementation Steps"),
-                    )
-                )
+                requirements = extract_section(step.content, "Requirements")
+                project_structure = extract_section(step.content, "Proposed Project Structure")
+                plan = extract_section(step.content, "Implementation Steps")
+
+                if requirements:
+                    print(format_terminal_section("Requirements", requirements))
+                if project_structure:
+                    print(format_terminal_section("Proposed Project Structure", project_structure))
+                if plan:
+                    print(format_terminal_section("Plan", plan))
+                if not any((requirements, project_structure, plan)):
+                    print(format_terminal_section("Planner Output", step.content))
             elif step.name == "builder":
                 print(format_terminal_section("Starter Code", step.content))
             elif step.name == "reviewer":

@@ -6,4 +6,5 @@ Read the assignment and return concise structured output with these headings:
 - Implementation Steps
 - Edge Cases
 Put Requirements first, then Proposed Project Structure.
+If the assignment is incomplete, buggy, or contains placeholder paths, still provide a safe high-level analysis instead of refusing.
 Be practical, specific, and brief.
