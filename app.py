@@ -28,6 +28,7 @@ assignment = st.text_area(
 if st.button("Run Workflow", type="primary"):
     assignment_placeholder = st.container()
     requirements_placeholder = st.container()
+    project_structure_placeholder = st.container()
     plan_placeholder = st.container()
     code_placeholder = st.container()
     review_placeholder = st.container()
@@ -46,6 +47,9 @@ if st.button("Run Workflow", type="primary"):
                 with requirements_placeholder:
                     st.subheader("Requirements")
                     st.markdown(extract_section(step.content, "Requirements"))
+                with project_structure_placeholder:
+                    st.subheader("Proposed Project Structure")
+                    st.markdown(extract_section(step.content, "Proposed Project Structure"))
                 with plan_placeholder:
                     st.subheader("Plan")
                     st.markdown(extract_section(step.content, "Implementation Steps"))

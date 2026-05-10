@@ -216,7 +216,7 @@ export OLLAMA_MODEL="llama3.1"
 - Notebook uses the wrong model: set `OLLAMA_MODEL`, not `MODEL_NAME`, when configuring the notebook through environment variables.
 
 ## What It Shows
-- `Planner`: extracts requirements and creates a plan
+- `Planner`: extracts requirements, proposes a project structure, and creates a plan
 - `Builder`: generates starter code
 - `Reviewer`: checks coverage and suggests improvements
 - `DeepAgent`: orchestrates the deterministic multi-step flow

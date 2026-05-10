@@ -36,6 +36,7 @@ class WorkflowResult:
 
     assignment: str
     requirements: str
+    project_structure: str
     plan: str
     starter_code: str
     review: str
@@ -103,6 +104,7 @@ class DeepAgent:
         return WorkflowResult(
             assignment=assignment,
             requirements=extract_section(planner_output, "Requirements"),
+            project_structure=extract_section(planner_output, "Proposed Project Structure"),
             plan=extract_section(planner_output, "Implementation Steps"),
             starter_code=builder_output,
             review=review_output,

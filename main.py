@@ -47,6 +47,12 @@ def main() -> int:
                 )
                 print(
                     format_terminal_section(
+                        "Proposed Project Structure",
+                        extract_section(step.content, "Proposed Project Structure"),
+                    )
+                )
+                print(
+                    format_terminal_section(
                         "Plan",
                         extract_section(step.content, "Implementation Steps"),
                     )

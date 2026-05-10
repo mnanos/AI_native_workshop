@@ -364,6 +364,7 @@ Click **Run Workflow**.
 Expected UI output sections:
 - Assignment
 - Requirements
+- Proposed Project Structure
 - Plan
 - Starter Code
 - Review
@@ -440,6 +441,7 @@ python3 main.py
 The CLI should print these sections:
 - Assignment
 - Requirements
+- Proposed Project Structure
 - Plan
 - Starter Code
 - Review
@@ -688,7 +690,7 @@ ai-native-workshop/
 High-level flow:
 
 1. User enters assignment
-2. Planner extracts requirements and plan
+2. Planner extracts requirements, proposed project structure, and plan
 3. Builder generates code
 4. Reviewer checks code against the assignment
 5. App or CLI displays all outputs

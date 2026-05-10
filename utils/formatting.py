@@ -57,6 +57,7 @@ def extract_section(text: str, heading: str) -> str:
 
         if capture and normalized in {
             "requirements",
+            "proposed project structure",
             "assumptions",
             "implementation steps",
             "edge cases",
