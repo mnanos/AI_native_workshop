@@ -33,13 +33,15 @@ Better experience:
 
 ### 1.2 Install Required Tools
 
-Install:
+Install for every participant:
 - Python 3.10+
 - Git
 - Docker Desktop for Windows, or Docker Engine for Linux / WSL
 - VS Code or another code editor
 - Terminal access
-- Jupyter Notebook / JupyterLab if using the notebook path
+
+Install only if using the notebook path:
+- Jupyter Notebook or JupyterLab
 
 Verify Python:
 
@@ -841,4 +843,3 @@ Possible next steps after the workshop:
 - add multiple workflow branches
 - replace simple orchestration with LangGraph
 - expose the workflow via FastAPI
-
