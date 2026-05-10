@@ -36,12 +36,24 @@ Better experience:
 Install for every participant:
 - Python 3.10+
 - Git
-- Docker Desktop for Windows, or Docker Engine for Linux / WSL
+- Docker Desktop for Windows, or Docker Engine for Linux / WSL 2
 - VS Code or another code editor
 - Terminal access
 
 Install only if using the notebook path:
 - Jupyter Notebook or JupyterLab
+
+Installation references:
+
+| Tool | Reference |
+| --- | --- |
+| Python 3.10+ | Download from `https://www.python.org/downloads/` |
+| Git | Download from `https://git-scm.com/downloads` |
+| Docker Desktop for Windows | Follow `https://docs.docker.com/desktop/setup/install/windows-install/` |
+| Docker Engine for Linux / WSL 2 | Follow `https://docs.docker.com/engine/install/` |
+| VS Code | Download from `https://code.visualstudio.com/download` |
+| Terminal access | Use PowerShell on Windows, Terminal on macOS, or the default shell in Linux / WSL |
+| Jupyter Notebook / JupyterLab | Install in the workshop virtual environment with `python -m pip install notebook jupyterlab ipykernel` or follow `https://jupyter.org/install` |
 
 Verify Python:
 
