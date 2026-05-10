@@ -19,6 +19,7 @@ class BuilderAgent:
             f"{assignment.strip()}\n\n"
             "Planner Output:\n"
             f"{planner_output.strip()}\n\n"
-            "Generate the starter Python code now."
+            "Generate starter code now. Use the file names from the proposed project "
+            "structure and label each code block with its relative file path."
         )
         return self.client.ask_model(system_prompt=self.system_prompt, user_prompt=user_prompt)

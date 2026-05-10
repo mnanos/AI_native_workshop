@@ -217,7 +217,7 @@ export OLLAMA_MODEL="llama3.1"
 
 ## What It Shows
 - `Planner`: extracts requirements, proposes a project structure, and creates a plan
-- `Builder`: generates starter code
+- `Builder`: generates file-labeled starter code that follows the proposed project structure
 - `Reviewer`: checks coverage and suggests improvements
 - `DeepAgent`: orchestrates the deterministic multi-step flow
 - `WorkflowCoordinator`: thin wrapper that keeps the CLI and Streamlit entrypoints stable

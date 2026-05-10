@@ -657,8 +657,9 @@ ai-native-workshop/
 - generates implementation plan
 
 `agents/builder.py`:
-- generates starter code
+- generates file-labeled starter code
 - uses assignment and planner output as context
+- follows the planner's proposed project structure when naming files
 
 `agents/reviewer.py`:
 - reviews generated code
@@ -691,7 +692,7 @@ High-level flow:
 
 1. User enters assignment
 2. Planner extracts requirements, proposed project structure, and plan
-3. Builder generates code
+3. Builder generates file-labeled starter code that follows the proposed project structure
 4. Reviewer checks code against the assignment
 5. App or CLI displays all outputs
 
