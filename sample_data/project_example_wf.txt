@@ -1,4 +1,4 @@
-1) I want to do an agentic AI action based on the local LLM ollama, with the following actions:
+1) I want to create an agentic AI action based on the local LLM ollama, with the following actions:
 - read  an email with the attachments one or many as pdf or word
 - using the local LLM create a post for WordPress site
 - propose the post with relevant title, short summary with dates if any and reference to the pdf or word docs.
