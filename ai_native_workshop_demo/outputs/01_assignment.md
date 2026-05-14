@@ -1,0 +1,2 @@
+Build a Python program that reads sensor measurements from a CSV file,
+computes the average and standard deviation, and generates a simple plot.
