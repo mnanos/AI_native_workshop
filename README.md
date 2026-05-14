@@ -140,8 +140,17 @@ curl http://localhost:11434/api/tags
 Activate the virtual environment, then run:
 
 ```bash
+source .venv/bin/activate
 streamlit run app.py
 ```
+
+Or run Streamlit through Python with `-m`:
+
+```bash
+.venv/bin/python -m streamlit run app.py
+```
+
+Do not run `python3 streamlit run app.py`; that makes Python look for a local file named `streamlit`.
 
 Streamlit prints a local URL, usually:
 

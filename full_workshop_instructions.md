@@ -374,9 +374,20 @@ curl http://localhost:11434/api/tags
 
 ### 2.2 Run the Streamlit App
 
+Activate the virtual environment first:
+
 ```bash
+source .venv/bin/activate
 streamlit run app.py
 ```
+
+If you prefer to run Streamlit through Python, use `-m`:
+
+```bash
+.venv/bin/python -m streamlit run app.py
+```
+
+Do not run `python3 streamlit run app.py`; that makes Python look for a local file named `streamlit`.
 
 Streamlit usually prints:
 
