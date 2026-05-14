@@ -221,6 +221,41 @@ docker run -d \
   ollama/ollama
 ```
 
+#### 1.7.1 Start Ollama with NVIDIA CUDA GPU Support
+
+Use this version when Docker can access an NVIDIA GPU. The key addition is `--gpus=all`.
+
+PowerShell:
+
+```powershell
+docker run -d `
+  --gpus=all `
+  --name ollama `
+  -p 11434:11434 `
+  -v ollama:/root/.ollama `
+  --restart unless-stopped `
+  ollama/ollama
+```
+
+Bash / WSL:
+
+```bash
+docker run -d \
+  --gpus=all \
+  --name ollama \
+  -p 11434:11434 \
+  -v ollama:/root/.ollama \
+  --restart unless-stopped \
+  ollama/ollama
+```
+
+Verify GPU access:
+
+```bash
+docker exec ollama nvidia-smi
+docker logs ollama | grep -i cuda
+```
+
 If the container already exists:
 
 ```bash
